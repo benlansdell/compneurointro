@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+		<title>Mathematics of something...</title>
 
 		<link rel="stylesheet" href="css/reset.css">
 		<link rel="stylesheet" href="css/reveal.css">
@@ -13,6 +13,11 @@
 		<!-- Theme used for syntax highlighting of code -->
 		<link rel="stylesheet" href="lib/css/monokai.css">
 
+		<!-- Mathjax for math typesetting -->
+		<script type="text/x-mathjax-config">
+			MathJax.Hub.Config({TeX: {extensions: ["color.js"]}});
+		</script>
+		
 		<!-- Printing and PDF exports -->
 		<script>
 			var link = document.createElement( 'link' );
@@ -25,25 +30,83 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
+
+				<section data-background="assets/brainbow2.jpg">
+					<h4>Optimizing policies with thresholds in neuroscience</h4>
+				<hr>
+				<p style="text-align: center; font-size: larger; text-shadow: 0px 0px 0px #0000ff;">Ben Lansdell, Bioengineering UPenn<br><br>
+				<aside class="notes">
+				  <span style="color: red">
+				  </span> •
+				  • <span style="color: green"></span>
+				</aside>
+				  </section>
+		  
+				<section>What is this...?
+					$$\pi^2 = \sum_{1 = 1}^\infty \frac{6}{n^2}$$
+					<aside class="notes">
+						<span style="color: red">
+						</span> •What is this?
+						• <span style="color: green"></span>
+					  </aside>
+				</section>
+
+				<section> <span class="fragment highlight-green">Slide 2</span>
+					This will be great.
+				</section>
 			</div>
 		</div>
 
 		<script src="js/reveal.js"></script>
-
+		<script src="lib/js/head.min.js"></script>
 		<script>
-			// More info about config & dependencies:
-			// - https://github.com/hakimel/reveal.js#configuration
-			// - https://github.com/hakimel/reveal.js#dependencies
+			head.js(
+			"lib/js/jquery.min.js",
+			"lib/js/jquery.hotkeys.js",
+			"lib/js/underscore.min.js",
+			"lib/js/swfobject.js",
+			"lib/js/dat.gui.js",
+			"lib/js/EventEmitter.js",
+
+			function() {
 			Reveal.initialize({
-				dependencies: [
-					{ src: 'plugin/markdown/marked.js' },
-					{ src: 'plugin/markdown/markdown.js' },
-					{ src: 'plugin/notes/notes.js', async: true },
-					{ src: 'plugin/highlight/highlight.js', async: true }
-				]
+			controls: false,
+			progress: true,
+			history: true,
+			center: false,
+			keyboard: true,
+			touch: false,
+			overview: true,
+			mouseWheel: false,
+			width: 960,
+			height: 720,
+
+			theme: false, // hardcoded with CSS import in <head>
+			transition: 'fade', // default/cube/page/concave/zoom/linear/fade/none
+			transitionSpeed: 'default', // default/fast/slow
+
+			math: {
+				mathjax: 'mathjax/MathJax.js',
+				config: 'TeX-AMS_HTML-full',
+			},
+
+			dependencies: [
+				{ src: 'reveal.js/lib/js/classList.js',
+			condition: function() { return !document.body.classList; }},
+				{ src: 'reveal.js/plugin/markdown/marked.js',
+			condition: function() { return !!document.querySelector ('[data-markdown]'); }},
+				{ src: 'reveal.js/plugin/markdown/markdown.js',
+			condition: function() { return !!document.querySelector ('[data-markdown]'); }},
+				{ src: 'reveal.js/plugin/highlight/highlight.js', async: true,
+			callback: function() { hljs.initHighlightingOnLoad (); }},
+				{ src: 'reveal.js/plugin/notes/notes.js', async: true,
+			condition: function() { return !!document.body.classList; }},
+				{ src: 'mymath.js', async: true },
+			{ src: 'pdfimgs.js', async: true },
+			{ src: 'slideautostart.js', async: true },
+			],
 			});
-		</script>
+		});
+  </script>
 	</body>
 </html>
