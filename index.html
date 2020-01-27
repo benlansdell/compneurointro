@@ -47,7 +47,7 @@
 		  <!-- The overall introduction -->
 		  <!-- ---------------------------------------------------------------------- -->
 
-	<section data-background="assets/brainbow2.jpg">
+<!--	<section data-background="assets/brainbow2.jpg">
 		<h2>Two complementary tasks to understand intelligence</h2>
 		<div id = "left">
 		1. Build artificial systems
@@ -97,7 +97,6 @@
 		<div id = "left">
 			<br>
 			<ul>
-				<li>Cognitive abilities: abstract concepts, logic and reasoning, pattern recognition, planning, decision making, language</li>
 				<li> Efficient learning is a key part of human intelligence
 				<li> How do we learn so efficiently? 
 				<li class="fragment"> Current learning theories do not scale to typical task or network sizes
@@ -118,17 +117,17 @@
 			A key question becomes what is the neurological basis for this flexibility? This is a large, multifaceted question, as learning has of course different mechanisms in the many different domains I listed above. 
 		• <span style="color: green"></span>
 	  </aside>	</section>
-
+	-->
 	  <section data-background="assets/brainbow2.jpg">
 		<h2>Two complementary tasks to understand intelligence</h2>
 		<div>
 		<div id = "left">
 			1. Build artificial systems
-			<img src="assets/DeepBlue.png" width="95%">
+			<img src="assets/alphago.jpeg" width="75%">
 		</div>
 		<div id = "right">
 		2. Study human intelligence
-		<img src="assets/Brain-PNG-Image.png" width="86%">
+		<img src="assets/Brain-PNG-Image.png" width="90%">
 		</div>
 		</div>
 		<div style="clear: both">
@@ -152,6 +151,7 @@
 	<div id = "left">
 		<br>
 		<img src="assets/chocolate.png" width="93%">
+		<p class="rcred">Messerli, N Engl J Med 2012</p>
 	</div>
 	<div id = "right">
 		<br>
@@ -601,16 +601,15 @@
 		  
 			  <section data-background-color='#ffffff'>
 				  <h2>Application to brain-computer interface learning</h2>
-				  <div id = "left">
+				  <div>
 					  <ul>
-						  <li> Subjects can be trained to control activity of individual primary motor cortex neurons
-						  <li> Can be done just as well for neurons involved in wrist-control, even when performing wrist movements (Lansdell et al 2020)
+						  <li> In single-unit BCIs, individual neurons are trained through biofeedback </li>
+						  <li>Here, causal effect of a neuron is known <em>by construction</em> </li> 
+						  <li> Neurons involved in wrist-control can control BCI, even when performing wrist movements (Lansdell et al 2020)
 						  <li> How does the network change specifically the control neuron's activity? 
 						  <li> Training during wrist motion introduces confounds &ndash; must solve causal inference problem
 					  </ul>
-				  </div>
-				  <div id = "right">
-				  <img src="assets/biofeedback.svg" width="85%">
+				  <img src="assets/biofeedback.svg" width="35%">
 				  </div>
 		  
 				<aside class="notes">
@@ -630,28 +629,17 @@
 		  
 			  <section data-background-color='#ffffff'>
 				<h2>Application to brain-computer interface learning</h2>
-				<div id = "left">
+				<div>
+					<p>Network learning wth RDD shows:</p>
 					<ul>
-						<li> Subjects can be trained to control activity of individual primary motor cortex neurons
-						<li> Can be done just as well for neurons involved in wrist-control, even when performing wrist movements (Lansdell et al 2020)
-						<li> How does the network change specifically the control neuron's activity? 
-						<li> Training during wrist motion introduces confounds &ndash; must solve causal inference problem
+						<li> performance independent of wrist tuning 
+						<li> more rapid separation of control unit learning from co-tuned population
 					</ul>
-				</div>
-				<div id = "right">
-				<img src="assets/biofeedback2.svg" width="85%">
+				<img src="assets/biofeedback2.svg" width="45%">
 				</div>
 		
 			  <aside class="notes">
 				<span style="color: red"></span> •
-				So, this was for 2 neurons. We can test it in a larger network and more interesting setting than an artifical reward function. 
-		
-				[Go through bullet points]
-				We see with RDD-based learning that performance doesn't matter on the correlation of the control neuron with other wrist-controlling neurons. This is similar to empirical findings, whereas learning with the observed dependence, final performance of the network does depend on the amount of correlation.
-		
-				In training, the weights for the individual control unit are more quickly separated from the rest of the units that are doing wrist control, compared to the observed dependence. 
-		
-				Thus this recapitulates findings from BCI learning.
 		
 				• <span style="color: green"></span>
 			  </aside>
@@ -660,9 +648,10 @@
 			  <section data-background="assets/brainbow2.jpg">
 				  <h2>Part 1 summary</h2>
 				  <ul>
-					  <li> RDD can be used to estimate causal effects, and can provide a plausible solution to the credit assignment problem in neural networks
+					  <li> RDD can be used to estimate causal effects, and can provide a solution to the credit assignment problem in spiking neural networks
 					  <li> Relies on the fact that neurons spike when input exceeds a threshold &ndash; spiking is a feature not a bug
-					  <li> Consistent with subthreshold-dependent plasticity
+					  <li> Shows a neuron can do causal inference without needing to randomize
+					  <li> Largely proof of principle, but consistent with subthreshold-dependent plasticity
 				  </ul>
 		  
 				<aside class="notes">
@@ -695,10 +684,11 @@
 				  <h2>Learning feedback weights</h2>
 				  <div id = "left">
 				  <ul>
-					  <li> REINFORCE or RDD by themselves do not lead to efficient learning &ndash; a high variance estimator
-					  <li> Can it be augmented with a network to provide neuron-specific error signals?
-					  <li> Cortical structure has both feedforward and feedback connections
-					  <li> Pyramidal neurons contain both apical and basal compartments, allows for separate sites of integration (Kording and Konig 2001, Guergiev et al 2017)
+					  <li> REINFORCE or RDD by themselves do not lead to efficient learning &ndash; high variance estimators
+					  <li> Ultimately, just learning based on a scalar reward signal is challenging
+					  <li class="fragment"> Can this signal be augmented with a network to provide neuron-specific error signals?
+					  <li class="fragment"> Cortical structure has both feedforward and feedback connections
+					  <li class="fragment"> Pyramidal neurons contain both apical and basal compartments, allowing for separate sites of integration (Kording and Konig 2001, Guergiev et al 2017)
 				  </ul>
 				  </div>
 				  <div id = "right">
@@ -718,7 +708,7 @@
 					<div id = "left">
 					<ul>
 						<li> Backpropagation suggests one form of such a network
-						<li> But well-known problems (e.g. weight transport)
+						<li> But well-known problems &ndash; e.g. weight transport
 					</ul>
 					</div>
 					<div id = "right">
@@ -726,24 +716,23 @@
 					</div>
 					<aside class="notes">
 					<span style="color: red"></span> •
-					Ok, so we've seen how a neuron can learn without noisily perturbing its activity but instead just noting how close it is to threshold.
-					This means it could learn in more general set of circumstances. But it doesn't mean that it can learn as efficiently as something trained with backpropagation. It is still just taking its own activity and relating that to a reward signal. Unlike an algorithm similar to backprop, there is no specific structure that communicates error signals specific to that neuron. 
-			
-					So, the question we address here is, can such methods be augmented with a network to provide neuron-specific error signals?
+						Backpropagation, as mentioned, suggests one form of this feedback networks. But also as mentioned, this has known problems, notably the so-called weight transport problem. 
+
 					• <span style="color: green"></span>
 				  </aside>	</section>	  
 		  
 			  <section data-background-color="#ffffff">
 				  <h2>Learning feedback weights</h2>
 				  <div id = "left">
-					Weight transport can be avoided by using random, fixed feedback weights, $B^i$.
+					  However:
 				 <ul>
+					<li>Weight transport can be avoided by using random, fixed feedback weights, $B^i$.
 					<li> Works on small fully connected networks (feedback alignment)</li>
 					<li> Doesn't work on deep networks, CNNs, networks with bottleneck layers
-				  <li> However, suggests even rough approximations to the gradient can be useful
+				  <li> Still, suggests even rough approximations to the gradient can be useful
 				  </ul>
 				  <p class="fragment">$\Rightarrow$ Can we outperform random weights by learning weights $B^i$?</p>
-				  <p class="fragment">Start with a perturbation-based estimator</p>
+				  <p class="fragment">A form of learning to learn (Lansdell and Kording 2019)</p>
 					</div>
 				  <div id = "right">
 				  <img src="assets/fig1_schematic_fa.png" width="60%">
@@ -950,28 +939,99 @@
 				  • <span style="color: green"></span>
 				</aside>	</section>
 		  
-				<section data-background="assets/brainbow2.jpg">
-					<h2>Outlook</h2>
-					<ul>
-					<li>Causal inference -> neuro</li>
-					</ul>
+				<section data-background-color="#ffffff">
+					<h2>Causal tools for machine learning, neuroscience, and intersections between them</h2>
+					<div id="left">
+					Paths to better causal inference:
+					<ol>
+					<li>Quasi-experimental methods (e.g. thresholds, RDD)</li>
+					<li>Invariant prediction</li>
+					<li>Big data</li>
+					</ol>
+					</div>
+					<div id="right">
+					</div>
 					<aside class="notes">
 					<span style="color: red"></span> •
-						 We believe a combination of these two approaches: credit assignment through causal inference, and learning a feedback system can provide a plausible and scalable learning system that could be implemented in the brain.........
 					• <span style="color: green"></span>
 				  </aside>	</section>
 
-		  <!-- ----------------------------------------------------------------------- -->
-		  <!-- Bandits paper -->
-		  <!-- -----------------------------------------------------------------------
-		  
-		  * Thresholds are useful tools outside of neuroscience. Can allow conservative learning with thresholds in bandit setting. We can formalize these ideas somewhat. (Sofia paper)
+				  <section data-background-color="#ffffff">
+					<h2>Causal tools for machine learning, neuroscience, and intersections between them</h2>
+					<div id="left">
+					Paths to better causal inference:
+					<ol>
+					<li style="color: red">Quasi-experimental methods (e.g. thresholds, RDD)</li>
+					<li>Invariant prediction</li>
+					<li>Big data</li>
+					</ol>
+					</div>
+					<div id="right">
+						<h5>Thresholding for conservative exploration in contextual multi-armed bandits</h5>
+						<img src="assets/bandits_intro_v2.svg" width="85%">
+						<p class="rcred">Lansdell, Triantafilou, and Kording 2020. <em>submitted</em></p>
+					</div>
+					<aside class="notes">
+					<span style="color: red"></span> •
+					• <span style="color: green"></span>
+				  </aside>	</section>
 
-			-->
+				  <section data-background-color="#ffffff">
+					<h2>Causal tools for machine learning, neuroscience, and intersections between them</h2>
+					<div id="left">
+					Paths to better causal inference:
+					<ol>
+					<li>Quasi-experimental methods (e.g. thresholds)</li>
+					<li style="color: red">Invariant prediction</li>
+					<li>Big data</li>
+					</ol>
+					</div>
+					<div id="right">
+					</div>
+					<aside class="notes">
+					<span style="color: red"></span> •
+					• <span style="color: green"></span>
+				  </aside>	</section>
 
-		  <!-- ----------------------------------------------------------------------- -->
-		  <!-- Outlook/future work -->
-		  <!-- -----------------------------------------------------------------------
+				  <section data-background-color="#ffffff">
+					<h2>Causal tools for machine learning, neuroscience, and intersections between them</h2>
+					<div id="left">
+						Paths to better causal inference:
+						<ol>
+						<li>Quasi-experimental methods (e.g. thresholds)</li>
+						<li>Invariant prediction</li>
+						<li style="color: red">Big data</li>
+						</ol>
+					</div>
+					<div id="right">
+						<h5>Quantifying biases in neuron morphology due to staining method</h5>
+						<img src="assets/morphology_f1.jpg" width="95%">
+						<p class="rcred">Farhoodi, Lansdell, and Kording 2019. <em>Frontiers in neuroinformatics</em></p>
+					</div>
+					<aside class="notes">
+					<span style="color: red"></span> •
+					• <span style="color: green"></span>
+				  </aside>	</section>
+
+				  <section data-background-color="#ffffff">
+					<h2>Causal tools for machine learning, neuroscience, and intersections between them</h2>
+					<div id="left">
+						Understanding our own learning:
+					<ol>
+					<li>BCIs as testbed for credit assignment 
+					<li> Learning to learn causal inference 
+					</ol>
+					</div>
+					<div id="right">
+					</div>
+					<aside class="notes">
+					<span style="color: red"></span> •
+					• <span style="color: green"></span>
+				  </aside>	</section>
+
+				<!-- ----------------------------------------------------------------------- -->
+		  		<!-- Outlook/future work -->
+		    	<!-- -----------------------------------------------------------------------
 
     * A larger picture that emerges: causal tools for neuroscience, machine learning, and intersections between them.
         * We showed how casting the credit assignment problem as a causal inference problem leads to new ideas and learning rules [mention applications in neuro]
@@ -1007,6 +1067,7 @@
 					<li> Ivana Milovanovic (UW)</li>
 					<li> Cooper Mellema (UT Austin)</li>
 					<li> Eberhard Fetz (UW)</li>
+					<li> Sofia Triantafilou (UPitt) </li>
 					<!-- <li> J Nathan Kutz (UW)</li>
 					<li> Kevin Ford (UC Berkeley)</li>
 					<li> David Kleinfeld (UCSD)</li>
