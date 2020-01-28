@@ -288,9 +288,19 @@
 				<h2>Credit assignment as causal inference</h2>
 				<p>One solution: Randomization</p>
 
-				If independent (unconfounded) noise is added to the system, this can be correlated with reward for an estimate of loss gradients
+				<p>If independent (unconfounded) noise is added to the system, this can be correlated with reward for an estimate of loss gradients</p>
 
-				<p class="fragment">$\Rightarrow$ How can a neuron perform causal inference?</p>
+				<p>In fact, the REINFORCE algorithm correlates reward with independent pertubations in activity, $\xi$:
+					$$
+					\mathbb{E}( R\xi ) \approx \sigma^2 \frac{\delta R}{\delta h}
+					$$</p>
+				<div class="fragment">
+				<p>But:</p>
+					<ul>
+					<li> Requires each neuron measures an IID noise source, $\xi^i$, or knows its output relative to some expected output
+					<li> Only well characterized in specific circuits e.g. birdsong learning (Fiete and Seung 2007)</li>
+					</ul>
+				</div>
 				<aside class="notes">
 				<span style="color: red"></span> •
 				So, given these ideas we can rephrase our question about credit assignment again. We can rephase our problem into a network wanting to know which actions cause reward. And, what is a neuron's causal effect on reward, and so how should it change to improve? 
@@ -304,8 +314,8 @@
 
 
 			  <section data-background-color="#ffffff">
-				  <h2>An observation</h2>
-				  Decisions made with arbitary thresholds let us observe counterfactuals
+				  <h2>Causal learning without randomization</h2>
+				  An observation: decisions made with arbitary thresholds let us observe counterfactuals
 				  <br>
 				  <img src="assets/rdd.svg" width="50%">
 				  <p class="rcred">Adapted from Moscoe et al, J Clin Epid 2015</p>
@@ -324,14 +334,7 @@
 						<li> A spike can have a measurable effect on outcome and reward
 					</ol>
 		  
-					<p class="fragment">Suggests regression discontinuity design can be used by a neuron to estimate its causal effect.<br><br>
-					
-					Specifically, propose a neuron approximates:
-				  $$
-				  \frac{\partial R}{\partial h^i}\propto \mathbb{E}(R|h^i \leftarrow 1) - \mathbb{E}(R|h^i \leftarrow 0)= \beta^i
-				  $$
-				  and uses RDD to estimate $\beta$.
-		  
+					<p class="fragment">Suggests regression discontinuity design can be used by a neuron to estimate its causal effect.<br>		  
 				<aside class="notes">
 				  <span style="color: red"></span> •
 				  This is useful in the neural learning setting. Because a neuron spikes when its input is above a threshold. In some cases at least, a spike does have a measureable effect on a reward signal. 
@@ -348,13 +351,12 @@
 		  <!-- ---------------------------------------------------------------------- -->
 		  
 			  <section data-background-color='#ffffff'>
-				<h2>RDD as a way for a neuron to solve credit assignment</h2>
+				<h2>RDD for solving credit assignment</h2>
 				  <img src="assets/rdd_fig1a.svg" width="55%">
 				  <p class="rcred">Lansdell and Kording, bioRxiv 2019</p>	
 					<ul>
 						<li> Inputs that place the neuron close to threshold are unbiased estimate of causal effect
 						<li> Estimate piece-wise constant model: $$R = \gamma_i + \beta_i H_i$$
-						<li> Can operate with correlated noise sources, no need to measure an independent noise source
 					</ul>
 		  
 				<aside class="notes">
@@ -364,26 +366,12 @@
 				</aside>
 			  </section>
 
-			  <section data-background-color='#ffffff'>
-				<h2>RDD as a way for a neuron to solve credit assignment</h2>
-				  <img src="assets/rdd_fig1a.svg" width="55%">
-				  <p class="rcred">Lansdell and Kording, bioRxiv 2019</p>	
-					<ul>
-						<li> Inputs that place the neuron close to threshold are unbiased estimate of causal effect
-						<li> Estimate piece-wise linear model: $$R = \gamma_i + \beta_i H_i + [\alpha_{ri} H_i + \alpha_{li}(1-H_i)](Z_i - \mu)$$
-						<li> Can operate with correlated noise sources, no need to measure an independent noise source
-					</ul>
-		  
-				<aside class="notes">
-				  <span style="color: red"></span> •
-					The same idea can be applied with any simple regression model. Common in econometrics is to estimate a piece-wise linear model on either side of the threshold. 
-				  • <span style="color: green"></span>
-				</aside>
-			  </section>
+			  <!-- Take a step back and talk about the fact that spiking is a feature, not a bug, here?? -->
 
 			  <section data-background-color='#ffffff'>
-				  <h2>Demonstration on a 2 neuron network</h2>
-				  <img src="assets/fig2a.svg" width="85%">
+				  <h2>A small demonstration</h2>
+				  <p>The two-neuron network with noise correlations</p>
+				  <img src="assets/fig2a_lif.svg" width="35%">
 		  
 				<aside class="notes">
 				  <span style="color: red"></span> •
@@ -391,53 +379,45 @@
 				  • <span style="color: green"></span>
 				</aside>
 			  </section>
-		  
+		  		  
 			  <section data-background-color='#ffffff'>
-				  <h2>Demonstration on a 2 neuron network</h2>
-				  <img src="assets/fig2b.svg" width="85%">
-		  
-				<aside class="notes">
-				  <span style="color: red"></span> •
-				  • <span style="color: green"></span>
-				</aside>
-			  </section>
-		  
-			  <section data-background-color="#ffffff">
-				<h2>Using $\beta$ to update weights</h2>
-		  
-					<p>Under the assumptions:</p>
+				<h2>A small demonstration</h2>
+				<p>Can use RDD to estimate the causal effect</p>
+				<img src="assets/fig2a_ace.svg" width="45%">
+		
+			  <aside class="notes">
+				<span style="color: red"></span> •
+				So how does this look in simulation? We demonstrate the idea on a simple 2 neuron network. We inject two neurons with correlated noise, xi. They have what are called leaky integrate and fire dynamics, which includes a spiking mechanism when the voltage exceeds some value theta. Each neuron runs RDD for a window size p. We can observe, if we fit a piecewise constant model the estimate becomes unbiased for small p. If we use the piece wise linear model, the estimate is in fact unbiased for large value of also. We can compare the RDD estimator to what we called the observed dependence, which takes p = 1. that is we just use all points below and above the threhsold to estimate the relationship. This is confounded for highly correlated inputs. We see on these graphs that bias. 
+				• <span style="color: green"></span>
+			  </aside>
+			</section>
+
+			<section data-background-color='#ffffff'>
+				<h2>A small demonstration</h2>
+				<p>In cases where a correlational estimator fails</p>
+				$$\beta = \mathbb{E}(R|H\leftarrow 1) - \mathbb{E}(R|H\leftarrow 0), \quad \beta_{OD} = \mathbb{E}(R|H=1) - \mathbb{E}(R|H=0)$$
+				<img src="assets/fig2a_lossland.svg" width="85%">
+		
+			  <aside class="notes">
+				<span style="color: red"></span> •
+				So how does this look in simulation? We demonstrate the idea on a simple 2 neuron network. We inject two neurons with correlated noise, xi. They have what are called leaky integrate and fire dynamics, which includes a spiking mechanism when the voltage exceeds some value theta. Each neuron runs RDD for a window size p. We can observe, if we fit a piecewise constant model the estimate becomes unbiased for small p. If we use the piece wise linear model, the estimate is in fact unbiased for large value of also. We can compare the RDD estimator to what we called the observed dependence, which takes p = 1. that is we just use all points below and above the threhsold to estimate the relationship. This is confounded for highly correlated inputs. We see on these graphs that bias. 
+				• <span style="color: green"></span>
+			  </aside>
+			</section>
+			
+			  <section data-background-color='#ffffff'>
+				  <h2>A small demonstration</h2>
+				  <p>Under some assumptions</p>
+				$$
+				\frac{\partial R}{\partial w^i_j} \approx \frac{\partial H^i}{\partial w^i_j} \beta^i
+				$$
 					<ul>
-						<li> Parameters only affect the reward through neuron's spiking activity, meaning $\mathbb{E}(R|H)$ is independent of parameters $\mathbf{w}$.
-						<li> The gradient term $\frac{\partial \mathbb{E}(H_i|H_{j\ne i})}{\partial w_i}$ is independent of $H_{j\ne i}$.
-						<li> Neurons $H_{j\ne i}$ satisfy the backdoor criterion with respect to $H_i \to R$.
-					</ul>
-					<p>Then:
-				  $$
-				  \frac{\partial R}{\partial w^i_j} \approx \frac{\partial H^i}{\partial w^i_j} \beta^i
-				  $$</p> 
-		  
-				<aside class="notes">
-				  <span style="color: red"></span> •
-				  We can then use the estimate of the causal effect to then update the weights for each network. Under the following assumptions, which I won't go into, the gradient of the reward wrt the weights can be approximated as, which lets us come up with a stochast gradient descent based update rule for the synaptic weights. 
-				  • <span style="color: green"></span>
-				</aside>
-			  </section>
-		  
-			  <section data-background-color='#ffffff'>
-				  <h2>Learning on a 2 neuron network</h2>
-				  <br>
+					<li> Can relate causal effect to gradients $\Rightarrow$ derive stochastic gradient descent learning rule 
+				  	</ul><br>
+				  <img src="assets/fig4.svg" width="100%">
 				  <ul>
-					  <li> Learning rule:
-						  $$
-		  \Delta \mathbf{u}_i = \begin{cases}
-		  -\eta [\mathbf{u}_i^T\mathbf{a}_i - R]\mathbf{a}_i,& \theta \le Z_i < \theta + p \text{ (just spikes)};\\
-		  -\eta [\mathbf{u}_i^T\mathbf{a}_i + R]\mathbf{a}_i,& \theta -p < Z_i < \theta \text{ (almost spikes)},
-		  \end{cases}
-						  $$
-					  <li> Learning trajectories are less biased and converge faster
-				  </ul><br><br>
-				  <img src="assets/fig4.svg" width="95%">
-		  
+					<li> Learning trajectories are less biased and converge faster
+				  	</ul>
 				<aside class="notes">
 				  <span style="color: red"></span> •
 				  The rule takes the following form. 
@@ -448,16 +428,34 @@
 			  </section>
 		  
 			  <section data-background-color='#ffffff'>
+				<h2>A larger example</h2>
+				<div>
+					<p>Loss function trains one neuron to have different firing rate from rest of population</p>
+				<img src="assets/biofeedback2.svg" width="45%">
+				<ul>
+					<li> Performance and learning curve independent of noise correlations
+					<li> RDD-trained network learns more quickly which neuron is the special
+				</ul>
+			</div>
+		
+			  <aside class="notes">
+				<span style="color: red"></span> •
+		
+				• <span style="color: green"></span>
+			  </aside>
+			</section>
+
+			  <section data-background-color='#ffffff'>
 				  <h2>Application to brain-computer interface learning</h2>
 				  <div>
 					  <ul>
 						  <li> In single-unit BCIs, individual neurons are trained through biofeedback </li>
 						  <li>Here, causal effect of a neuron is known <em>by construction</em> </li> 
-						  <li> Neurons involved in wrist-control can control BCI, even when performing wrist movements (Lansdell et al 2020)
 						  <li> How does the network change specifically the control neuron's activity? 
-						  <li> Training during wrist motion introduces confounds &ndash; must solve causal inference problem
+						  <li> Must solve causal inference problem
 					  </ul>
 				  <img src="assets/biofeedback.svg" width="35%">
+				  <p class="rcred">Lansdell et al IEEE Trans NSRE 2020</p>
 				  </div>
 		  
 				<aside class="notes">
@@ -474,21 +472,48 @@
 				  • <span style="color: green"></span>
 				</aside>
 			  </section>
-		  
+
 			  <section data-background-color='#ffffff'>
-				<h2>Application to brain-computer interface learning</h2>
-				<div>
-					<p>Network learning wth RDD shows:</p>
-					<ul>
-						<li> performance independent of wrist tuning 
-						<li> more rapid separation of control unit learning from co-tuned population
+				<h2>Is this plausible?</h2>
+					<ul> <li> It would require:
+						<ul>
+						<li> sub-threshold dependent plasticity
+						<li> neuromodulator dependent plasticity</ul>
 					</ul>
-				<img src="assets/biofeedback2.svg" width="45%">
-				</div>
+				<img src="assets/fig5a.svg" width="55%">
+				<p class="rcred">Ngezahayo et al 2000, Seol et al 2007</p>
+					<!-- <ul class="fragment">
+						<li> Additionally would predict super-threshold dependent plasticity
+					</ul>-->
 		
 			  <aside class="notes">
 				<span style="color: red"></span> •
+				Of course, we can ask if it is realistic for a neuron to do something like RDD-based learning? In fact, there are two components to the model really. The first is the only learning for inputs that plcae the neuron close to threshold. This is in part already established under something called sub-threshold dependent plasticity. Inputs that place a neuron too far below threhsold induce no learning, consistent with RDD. The model would additionally predict that very high super threshold inputs also induce no learning, but this hasn't been explicitly tested yet. 
 		
+				The other part of the model is the reward dependent component, in which the sign of the update switches with the magnitude of the reward signal. This has been established in some cases, but more experiments are also needed. Here the blue and red curves show the sign of the changes to weights for different neuromodulator concentrations, showing things can turn from potentiating (increasing) to depressing (decreasing). 
+		
+				Thus both aspects are largely consistent with neurobiology. 
+				• <span style="color: green"></span>
+			  </aside>
+			</section>
+
+			<section data-background-color='#ffffff'>
+				<h2>Why spike?</h2>
+				<ul>
+					<li> Neurons need to communicate over large distances
+					</ul>
+					<img src="assets/zebrafish.jpg" width="65%" style="border: 0px">
+					<ul class = "fragment">
+					<li> Computationally, a spiking discontinuity is inconvenient for learning
+					<li> What are the comptuational benefits of spiking? 
+					<ul><li> Must be things rate-based models can't do...</li></ul>
+					<li class="fragment"> With RDD-based learning, spiking is a feature and not a bug
+				</ul>
+				<aside class="notes">
+				<span style="color: red"></span> •
+				The rule takes the following form. 
+		
+				We observe the trajectories are less biased and converge faster than when using the observed dependence.
 				• <span style="color: green"></span>
 			  </aside>
 			</section>
@@ -496,10 +521,10 @@
 			  <section data-background="assets/brainbow2.jpg">
 				  <h2>Part 1 summary</h2>
 				  <ul>
-					  <li> RDD can be used to estimate causal effects, and can provide a solution to the credit assignment problem in spiking neural networks
-					  <li> Relies on the fact that neurons spike when input exceeds a threshold &ndash; spiking is a feature not a bug
-					  <li> Shows a neuron can do causal inference without needing to randomize
-					  <li> Largely conceptual, but consistent with subthreshold-dependent plasticity
+					<li> RDD can be used to estimate causal effects, and can provide a solution to the credit assignment problem in spiking neural networks
+					<li> Shows a neuron can do causal inference without needing to randomize
+					<li> Relies on the fact that neurons spike when input exceeds a threshold &ndash; spiking is a feature not a bug
+					<li> Largely conceptual, but consistent with subthreshold-dependent plasticity
 				  </ul>
 		  
 				<aside class="notes">
@@ -529,16 +554,56 @@
 			  </aside></section>	  
 					  
 			  <section data-background-color="#ffffff">
-				  <h2>Learning feedback weights</h2>
-				  <div id = "left">
-				  <ul>
-					  <li> REINFORCE or RDD by themselves do not lead to efficient learning &ndash; high variance estimators
-					  <li> Ultimately, just learning based on a scalar reward signal is challenging
-					  <li class="fragment"> Can this signal be augmented with a network to provide neuron-specific error signals?
-					  <li class="fragment"> Cortical structure has both feedforward and feedback connections
-					  <li class="fragment"> Pyramidal neurons contain both apical and basal compartments, allowing for separate sites of integration (Kording and Konig 2001, Guergiev et al 2017)
+				<h2>Learning rules that scale to larger problems</h2>
+				<div>
+				<img src="assets/learningrules.png" width="60%">
+				<p class="rcred">Richards et al Nature Neuroscience 2019</p>
+				<ul>
+					<li> Either implicitly or explicitly, many learning rules use gradient information to optimize their weights
+					<li> Vary according to their bias and variance
+				</ul>
+			</div>
+				<aside class="notes">
+				<span style="color: red"></span> •
+				Ok, so we've seen how a neuron can learn without noisily perturbing its activity but instead just noting how close it is to threshold.
+				This means it could learn in more general set of circumstances. But it doesn't mean that it can learn as efficiently as something trained with backpropagation. It is still just taking its own activity and relating that to a reward signal. Unlike an algorithm similar to backprop, there is no specific structure that communicates error signals specific to that neuron. 
+		
+				So, the question we address here is, can such methods be augmented with a network to provide neuron-specific error signals?
+				• <span style="color: green"></span>
+			  </aside>	</section>	  
+
+			  <section data-background-color="#ffffff">
+				<h2>Learning rules that scale to larger problems</h2>
+				<div>
+				<img src="assets/learningrules.png" width="60%">
+				<p class="rcred">Richards et al Nature Neuroscience 2019</p>
+				<ul>
+					<li> Reinforcement-learning based algorithms do not lead to efficient learning &ndash; high variance estimators
+					<li> $\Rightarrow$ Need higher-dimensional error signal to learn from
 				  </ul>
-				  </div>
+			</div>
+				<aside class="notes">
+				<span style="color: red"></span> •
+				Ok, so we've seen how a neuron can learn without noisily perturbing its activity but instead just noting how close it is to threshold.
+				This means it could learn in more general set of circumstances. But it doesn't mean that it can learn as efficiently as something trained with backpropagation. It is still just taking its own activity and relating that to a reward signal. Unlike an algorithm similar to backprop, there is no specific structure that communicates error signals specific to that neuron. 
+		
+				So, the question we address here is, can such methods be augmented with a network to provide neuron-specific error signals?
+				• <span style="color: green"></span>
+			  </aside>	</section>	  
+
+			  <section data-background-color="#ffffff">
+				  <h2>Learning rules that scale to larger problems</h2>
+				  <div id = "left">
+					  <ul>
+						<li>Is this plausible?</li>
+						<ul>
+						<li> Cortical structure has both feedforward and feedback connections
+					  <li> Pyramidal neurons contain both apical and basal compartments, allowing for separate sites of integration (Kording and Konig 2001, Guergiev et al 2017)
+					</ul>
+						<li>Does this help?</li>
+					</ul>
+					$\Rightarrow$ Investigate in the setting of artificial neuron networks
+				</div>
 				  <div id = "right">
 				  <img src="assets/cortex_schematic.png" width="80%">
 				  </div>
@@ -552,15 +617,16 @@
 				</aside>	</section>	  
 		  
 				<section data-background-color="#ffffff">
-					<h2>Learning feedback weights</h2>
+					<h2>Biologically implausible backpropagation</h2>
 					<div id = "left">
 					<ul>
-						<li> Backpropagation suggests one form of such a network
-						<li> But well-known problems &ndash; e.g. weight transport
+						<li> The gradient algorithm, backpropagation, suggests one form of such a network
+						<li> Low bias, low variance &ndash; 'the workhorse of deep learning' 
+						<li> But weights of this network would be transpose of the feedforward weights &ndash; e.g. require weight transport
 					</ul>
 					</div>
 					<div id = "right">
-					<img src="assets/fig1_schematic_bp.png" width="60%">
+					<img src="assets/fig1_schematic_bp.svg" width="63%">
 					</div>
 					<aside class="notes">
 					<span style="color: red"></span> •
@@ -570,20 +636,22 @@
 				  </aside>	</section>	  
 		  
 			  <section data-background-color="#ffffff">
-				  <h2>Learning feedback weights</h2>
+				  <h2>Learning without weight transport</h2>
 				  <div id = "left">
 					  However:
 				 <ul>
-					<li>Weight transport can be avoided by using random, fixed feedback weights, $B^i$.
-					<li> Works on small fully connected networks (feedback alignment)</li>
-					<li> Doesn't work on deep networks, CNNs, networks with bottleneck layers
-				  <li> Still, suggests even rough approximations to the gradient can be useful
+					<li>Weight transport can be avoided by using random, fixed feedback weights, $B_i$ &ndash; feedback alignment
+					<li> Works on small fully-connected networks
+						<li> Suggests high-dimensional error signals help, even if very biased
+						</ul>
+					But:
+					<ul>
+						<li> Doesn't work on deep networks, CNNs, networks with bottleneck layers
 				  </ul>
-				  <p class="fragment">$\Rightarrow$ Can we outperform random weights by learning weights $B^i$?</p>
-				  <p class="fragment">A form of learning to learn (Lansdell and Kording 2019)</p>
+				  <p class="fragment">$\Rightarrow$ Can we improve on feedback alignment by learning weights $B_i$?</p>
 					</div>
 				  <div id = "right">
-				  <img src="assets/fig1_schematic_fa.png" width="60%">
+				  <img src="assets/fig1_schematic_fa.svg" width="60%">
 				  </div>
 				  <aside class="notes">
 				  <span style="color: red"></span> •
@@ -609,40 +677,12 @@
 				  \end{equation}
 				  </div>
 				  <div id = "right">			
-				  <img src="assets/fig1_schematic_np.png" width="85.5%">
+				  <img src="assets/fig1_schematic_np.svg" width="85.5%">
 				  </div>
 				  <aside class="notes">
 				  <span style="color: red"></span> •
 				  • <span style="color: green"></span>
 				</aside>	</section>
-
-				  
-				  <section data-background-color="#ffffff">
-					<h2>Learning feedback weights with perturbations</h2>
-					<div id = "left">
-					Minimize $\mathbb{E}(\mathcal{L}(\mathbf{x}, \mathbf{y}))$. Assume activations are noisy: 
-					$$
-					\mathbf{h}_t^i = \sigma\left(\sum_k W^i_{\cdot k} \mathbf{h}_t^{i-1}\right) + c_h\xi^i_t
-					$$ 
-					REINFORCE-type estimator of error gradient:
-					\begin{equation*}
-					\hat{\lambda}^i = (\tilde{\mathcal{L}}(\mathbf{x},\mathbf{y},\xi)-\mathcal{L}(\mathbf{x},\mathbf{y})) \frac{\xi^i}{c_h} \approx \frac{\partial \mathcal{L}}{\partial \mathbf{h}^i}
-					\end{equation*}
-					Train feedback network to provide a useful error signal:
-					$$
-					\begin{equation}
-					\hat{B}^{i+1} = \text{argmin}_{B} \mathbb{E}\left\| B^T\mathbf{e}^{N+1} - \hat{\lambda^i} \right\|_2^2
-					\end{equation}
-					$$
-				</div>
-					<div id = "right">	
-						<p style="text-align: center">With direct feedback</p>
-					<img src="assets/dfa_np_schematic.svg" width="85.5%">
-					</div>
-					<aside class="notes">
-					<span style="color: red"></span> •
-					• <span style="color: green"></span>
-				  </aside>	</section>
 
 				  <section data-background-color="#ffffff">
 				  <h2>Learning feedback weights with perturbations</h2>
@@ -683,31 +723,12 @@
 				  </aside>	</section>
 
 				  <section data-background-color="#ffffff">
-					<h2>Learning feedback weights with perturbations</h2>
-
-					<p>Weights in all layers converge, for a linear network</p>
-			<p><em>Corollary 1:</em> For $\sigma(x) = x$, the least squares estimator
-				$$
-			\begin{equation*}
-			(\hat{B}^{n})^T = \hat{\lambda}^{n-1} (\mathbf{\tilde{e}}^{N+1})^T\left(\mathbf{\tilde{e}}^{N+1}(\mathbf{\tilde{e}}^{N+1})^T\right)^{-1}\qquad 1 \le n \le N+1, 
-			\end{equation*}$$
-			converges to the true feedback matrix, in the sense that:
-			$$
-			\lim_{c_h\to 0}\text{plim}_{T\to\infty} \hat{B}^{n} = \prod_{n}^{j=N+1} W^{j}, \qquad 1 \le n \le N+1.
-			$$
-			</p>
-					<aside class="notes">
-					<span style="color: red"></span> •
-					• <span style="color: green"></span>
-				  </aside>	</section>
-
-				  <section data-background-color="#ffffff">
 				  <h2>A small example</h2>
 				  <ul>
 					  <li> Test on a 4 layer network solving MNIST
 					  <li> Learns to more closely approximate true gradient than random weights
 				  </ul>
-				  <img src="assets/fig_2b_validate_nodepert_varw_correctbatches.png" width="95%">
+				  <img src="assets/fig_2b_validate_nodepert_varw_correctbatches.png" width="90%">
 				  <p class="rcred">Lansdell, Prakash and Kording, ICLR 2020</p>
 				  <aside class="notes">
 				  <span style="color: red"></span> •
@@ -734,8 +755,8 @@
 					<h2>A larger example</h2>
 					<ul>
 						<li>Also leads to improved performance on CNNs
-						<li>Too deep to propagate approximate signals through all layers
-						<li>Use <em>direct feedback alignment</em> instead
+						<li>(Too deep to propagate approximate signals through all layers
+						<br>$\Rightarrow$ Use <em>direct feedback alignment</em> instead)
 					</ul>
 					<br><br>
 					<table style="width:100%">
@@ -759,6 +780,8 @@
 						</tr>
 					</table> 
 					Mean test accuracy of CNN over 5 runs trained with backpropagation, node perturbation and direct feedback alignment (DFA)
+					<br><br>
+					<p class="fragment">$\Rightarrow$ Shows challenging computer vision problems can be solved without weight transport</p>
 
 						<aside class="notes">
 					<span style="color: red"></span> •
@@ -773,13 +796,13 @@
 					  <ul><li> neurons can use their spiking threshold to estimate their causal effect on reward
 					  <li> a perturbation-based learning rule can be used to train a feedback network to provide useful error information
 					  </ul>
-					  <li> A combination of the two approaches can provide biologically plausible and scaleable learning systems
 					  <li>Applications in:
 						  <ul>
 							  <li>Neuromorphic hardware &ndash; learning with spiking networks</li>
 							  <li>Application specific integrated circuits (ASICs) &ndash; learning without weight transport</li>
 						  </ul>
 					  </li>
+					  <li> A combination of these can provide biologically plausible and scaleable learning systems
 					</ul>
 					  <aside class="notes">
 				  <span style="color: red"></span> •
@@ -787,7 +810,7 @@
 				  • <span style="color: green"></span>
 				</aside>	</section>
 		  
-				<section data-background-color="#ffffff">
+				<!-- <section data-background-color="#ffffff">
 					<h2>Causal tools for machine learning, neuroscience, and intersections between them</h2>
 					<div id="left">
 					Paths to better causal inference:
@@ -915,8 +938,8 @@
 					<li> Ivana Milovanovic (UW)</li>
 					<li> Cooper Mellema (UT Austin)</li>
 					<li> Eberhard Fetz (UW)</li>
-					<li> Sofia Triantafilou (UPitt) </li>
-					<!-- <li> J Nathan Kutz (UW)</li>
+					<!-- <li> Sofia Triantafilou (UPitt) </li>
+					<li> J Nathan Kutz (UW)</li>
 					<li> Kevin Ford (UC Berkeley)</li>
 					<li> David Kleinfeld (UCSD)</li>
 					<li> Yonatan Aljadeff (ICL)</li>-->
@@ -945,16 +968,16 @@
 			  </section>
 		  
 			  <section data-background-color='#ffffff'>
-				  <h2>Is this realistic?</h2>
+				  <h2>Is this plausible?</h2>
 					  <ul> <li> Consistent with:
 						  <ul>
 						  <li> current models of sub-threshold dependent plasticity
 						  <li> current models of neuromodulator dependent plasticity</ul>
 					  </ul>
 				  <img src="assets/fig5a.svg" width="55%">
-					  <ul class="fragment">
+					  <!-- <ul class="fragment">
 						  <li> Additionally would predict super-threshold dependent plasticity
-					  </ul>
+					  </ul>-->
 		  
 				<aside class="notes">
 				  <span style="color: red"></span> •

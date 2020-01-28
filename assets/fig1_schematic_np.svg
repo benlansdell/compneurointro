@@ -27,8 +27,8 @@
      inkscape:window-maximized="1"
      inkscape:window-y="23"
      inkscape:window-x="0"
-     inkscape:cy="321.37386"
-     inkscape:cx="176.53291"
+     inkscape:cy="232.33065"
+     inkscape:cx="216.71095"
      inkscape:zoom="0.92090117"
      fit-margin-bottom="0"
      fit-margin-right="0"
@@ -442,19 +442,6 @@
      sodipodi:role="line">node perturbation</tspan></text>
 <text
    transform="scale(1,-1)"
-   xml:space="preserve"
-   style="font-style:normal;font-weight:normal;font-size:25.5172px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.63793"
-   x="522.76465"
-   y="-48.890076"
-   id="text1359"><tspan
-     sodipodi:role="line"
-     id="tspan1357"
-     x="522.76465"
-     y="-48.890076"
-     style="stroke-width:0.63793">W<tspan
-   style="font-size:16.5862px;baseline-shift:super;stroke-width:0.63793"
-   id="tspan1361">0</tspan></tspan></text><text
-   transform="scale(1,-1)"
    id="text1359-0"
    y="-134.69817"
    x="522.76465"
@@ -465,8 +452,8 @@
      x="522.76465"
      id="tspan1357-2"
      sodipodi:role="line">W<tspan
-   id="tspan1361-3"
-   style="font-size:16.5862px;baseline-shift:super;stroke-width:0.63793">1</tspan></tspan></text><text
+   id="tspan56361"
+   style="font-size:65%;baseline-shift:sub">1</tspan></tspan></text><text
    transform="scale(1,-1)"
    id="text1359-9"
    y="-223.9386"
@@ -478,5 +465,5 @@
      x="522.76465"
      id="tspan1357-9"
      sodipodi:role="line">W<tspan
-   id="tspan1361-7"
-   style="font-size:16.5862px;baseline-shift:super;stroke-width:0.63793">2</tspan></tspan></text></g></svg>
+   id="tspan56359"
+   style="font-size:65%;baseline-shift:sub">2</tspan></tspan></text></g></svg>
