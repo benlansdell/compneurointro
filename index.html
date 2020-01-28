@@ -47,77 +47,6 @@
 		  <!-- The overall introduction -->
 		  <!-- ---------------------------------------------------------------------- -->
 
-<!--	<section data-background="assets/brainbow2.jpg">
-		<h2>Two complementary tasks to understand intelligence</h2>
-		<div id = "left">
-		1. Build artificial systems
-		<img src="assets/DeepBlue.png" width="95%">
-		</div>
-		<div id = "right">
-		2. Study human intelligence
-		<img src="assets/Brain-PNG-Image.png" width="86%">
-		</div>
-		<aside class="notes">
-		<span style="color: red"></span> •
-		When we think about the history of both neuroscience and AI, we can view these fields as somewhat complementary approaches to understanding intelligence, but somewhat independent lines of research. 
-
-		But we could say more recently there has been a convergence of sorts, which has gotten some attention. 
-• <span style="color: green"></span>
-	  </aside>	</section>
-
-	  <section data-background="assets/brainbow2.jpg">
-		<h2>Two complementary tasks to understand intelligence</h2>
-		<div id = "left">
-		1. Build artificial systems
-		<img src="assets/DeepBlue.png" width="95%">
-		</div>
-		<div id = "right">
-			<br>
-			<ul>
-				<li>Advances in: game playing, image recognition, speech recognition, natural language processing</li>
-				<li><em>Learning</em> is the key to success</li>
-				<li>Much recent progress due to <em>deep neural networks</em> (+ more data + better hardware)</li>
-				<li class="fragment">Largely based on better <em>predictive models</em></li>
-			</ul>
-		</div>
-		<aside class="notes">
-		<span style="color: red"></span> •
-		In AI, progress in game playing, image recognition, speech recognition, natural language processing, and many other areas have all gained attention, both in academic circles and the wider public. 
-
-		One thing we can say about a lot of this progress, in contrast in particular to previous approach to AI, is that rather than construct explicit forms of features, or proceedures to solve a task, those things are themselves learnt from the relevant dataset. Learning has been the centerpiece of modern AI. 
-
-		We can summarize a lot of that progress, particularly that that comes form deep learning, as a result of more data, better hardware, some algorithmic improvements. 
-
-		An important caveat, that points to current shortcomings, and which I will describe in more detail momentarily, is that this success is largely based on building better predictive models. The distinction being, which I will describe in more detail, is that predictive models are not necessarily causal models. 
-		• <span style="color: green"></span>
-	  </aside>	</section>
-
-	  <section data-background="assets/brainbow2.jpg">
-		<h2>Two complementary tasks to understand intelligence</h2>
-		<div id = "left">
-			<br>
-			<ul>
-				<li> Efficient learning is a key part of human intelligence
-				<li> How do we learn so efficiently? 
-				<li class="fragment"> Current learning theories do not scale to typical task or network sizes
-			</ul>	
-		</div>
-		<div id = "right">
-		2. Study human intelligence
-		<img src="assets/Brain-PNG-Image.png" width="86%">
-		<p style="text-align:left"></p>
-		</ul>
-		</div>
-		<aside class="notes">
-		<span style="color: red"></span> •
-			Equally, when we aim to study human intelligence, we seek physiological bases for abilities such as logical reasoning, language processing, planning, decision making, pattern recognition 
-
-			In the same way, a key thing that separates human intelligence is our flexibility to learn new concepts, skills, so quickly. 
-
-			A key question becomes what is the neurological basis for this flexibility? This is a large, multifaceted question, as learning has of course different mechanisms in the many different domains I listed above. 
-		• <span style="color: green"></span>
-	  </aside>	</section>
-	-->
 	  <section data-background="assets/brainbow2.jpg">
 		<h2>Two complementary tasks to understand intelligence</h2>
 		<div>
@@ -244,37 +173,20 @@
   </aside>	</section>	  
 
 
-  		  <!-- ---------------------------------------------------------------------- -->
-		  <!-- Credit assignment problem -->
-		  <!-- ---------------------------------------------------------------------- -->
+  		  <!-- --------------------------------------------- -->
+		  <!-- Credit assignment problem as causal inference -->
+		  <!-- --------------------------------------------- -->
 
 			  <section data-background-color="#ffffff">
 				  <h2>Learning &ndash; improving performance over time</h2>
 				  <div>
-				  <div id = "left">
-					<img src="assets/losslandscape.png" width="75%">
-				  </div>
-				  <div id = "right">
-					<img src="assets/neuralnet.png" width="100%">
+				  <div>
+					<img src="assets/losslandscape.svg" width="50%">
 				  </div>
 				</div>
-				<div style="clear: both">
-					<ul>
-						<li>Formalized as minimizing a loss function, $R$, over a model's parameters</li>
-						<li>Here we consider a deep neural network with $N$ hidden layers: 
-							<ul>
-								<li> $\mathbf{h}^i = \sigma(W^i \mathbf{h}^{i-1})$ for $1 \le i \le N$ </li>
-								<li> with $\hat{\mathbf{y}} = f(W^{N+1} \mathbf{h}^{N})$ and $\mathbf{h}^0 = \mathbf{x}$ </li>
-								<li> data $(\mathbf{x}, \mathbf{y})$ are drawn from a distribution $\rho$</li>
-							</ul>
-							<li> For parameters $\theta = \{W^i\}_{i=1}^{N+1}$, solve: 
-								$$
-								\theta^* = \text{argmin}_\theta \mathbb{E}_\rho R(\mathbf{y}, \mathbf{\hat{y}}(\mathbf{x}))
-								$$
-							</li>
-						</li>
-					</ul>
-				</div>
+
+				Find parameters $\theta$ that minimize a loss function. 
+
 				<aside class="notes">
 				  <span style="color: red"></span> •
 				  Ok, so what do I mean by the credit assignment problem?
@@ -286,91 +198,14 @@
 				</aside>	</section>
 		  
 			  <section data-background-color="#ffffff">
-				  <h2>How does a neural network learn?</h2>
-				  <p>Credit assignment (Definition 1):</p>
-				  <ul>
-				  <li> What is a neuron's contribution to performance, $R$, and so how should it change to improve?
-					<li>The only algorithms to reach human-level performance in challenging tasks are based on deep networks trained with gradient descent
-					</ul>
-				  <br>
-				  <img src="assets/learning_rates.png" width="85%">
-				  <p class="rcred">Werfel, Xie, Seung NIPS 2004</p>
-				  <p style="text-align: center" class="fragment"> $\Rightarrow$ The brain may also use gradients to learn</p>
-					<aside class="notes">
-				  <span style="color: red"></span> •
-				  • <span style="color: green"></span>
-				In learning, if we take an individual neuron's view, and ask, given information available to it, how should it change its synaptic weights to increase performance? To answer that, it must estimate in some way, what is its contribute to performance, and so how should it change to improve?
-
-				A more specific form of this question comes from the following consideration. That is that, the only algorithms to reach human-level performance in a number of challenging tasks are deep neural networks trained with some form of gradient descent. 
-
-				This leads to the framing of the problem in terms of gradients... and the idea that the brain must in some way use gradients to learn. 
-				</aside>	</section>
-			  		  
-			  <section data-background-color="#ffffff">
-				  <h2>How does a neural network learn?</h2>
-			  <p>Credit assignment (Definition 2):</p>
-				  <ul>
-					  <li> How does a neuron estimate $\frac{\partial R}{\partial h}$ and so can update its weights/synaptic strengths, $W$?
-				  </ul>
-				  <br>
-				  <p>The artificial neural network solution: backpropagation</p>
-				  <ul>
-				  <li> Compute:
-					$$
-					\mathbf{e}^i = \begin{cases} \partial R/\partial \hat{\mathbf{y}}\circ \sigma'(W^{i}\mathbf{h}^{i-1}), & i = N+1;\\
-					\left((W^{i+1})^\mathsf{T} \mathbf{e}^{i+1}\right)\circ \sigma'(W^{i}\mathbf{h}^{i-1}), & 1 \le i \le N
-					\end{cases},
-					$$
-				  <li> Then $\frac{\partial R}{\partial \mathbf{h}^i} = (W^{i+1})^T \mathbf{e}^{i+1}$
-				  </ul>
-				  <div class="fragment">
-				  <p>But:</p>
-				  <ul>
-					<li>Relies on a feedback network knowing $(W^i)^T$</li>
-					<li>No such structure known to exist in the brain.</li>  
-				  </ul>
-				  </div>
-			  <aside class="notes">
-				  <span style="color: red"></span> •
-				  This leads to a more specific form of the credit assignment problem, how does a neuron estimate the gradient dR/dh? And so can use this to compute the gradient descent update to the weights W?
-		  
-				We can consider, how does an artificial neural network solve this problem? It does with the backpropagation algorithm. Which takes the following form. 
-
-
-				There are many well-known caveats with this algorithm, if we were to take it as a model for learning in neuronal networks. A particularly large caveat is that this would seem to imply there existed a structure, network, circuit in the brain that had the form of a deep neural network, but whose weights were the transpose of the original network. 
-				
-				Yet no such complementary structures are observed in the brain. It would seem to involve something called weight transport -- the idea that the feedforward network needs to constantly communicate its weights with this feedback network. 
-				  • <span style="color: green"></span>
-				</aside>	</section>	  
-		  		  
-			  <section data-background-color="#ffffff">
-				  <h2>A solution for neuronal networks</h2>
-				  <p>Neurons observe a globally distributed reward/prediction error signal (e.g. dopamine)</p>
-				  <ul>
-					  <li> Reinforcement learning algorithms learn policies to maximize reward in this setting
-					  <li> The REINFORCE algorithm correlates reward with a noisy pertubation in activity:
-						  $$
-						  \text{If } \tilde{\mathbf{h}}^i = \mathbf{h}^i + \xi^i, \text{ then } \mathbb{E}(\tilde{R}\xi^i) \approx \frac{\partial R}{\partial \mathbf{h}^i}
-						  $$
-				  </ul>
-				  <div class="fragment">
-				  <p>But:</p>
-				  <ol>
-					  <li> Requires each neuron measures an IID noise source, $\xi^i$, or knows its output relative to some  expected output.
-					  <li> Does not scale well &ndash; variance proportional to number of neurons
-				  </ol>
-				</div>
-				<p style="text-align: center" class="fragment">$\Rightarrow$ No satisfactory solution to credit assignment problem</p>
-				<aside class="notes">
-				  <span style="color: red"></span> •
-				  A more realistic solution is to not assume that any such structure exists in the brain that provides neuron specific error signal. Instead what is available to each neuron is just the reward signal itself. This is a reasonable assumption since certain neurotransmitters, like dopamine, have been demonstrated to play that role in some cases. Then we are in the domain of reinforcement learning, and there are many algorithms we can apply in this setting. One that has been explored quite a bit in many settings and varients is an algorithm known as the REINFORCE algorithm. The method simply correlates a noisy perturbation in a neuron's output with a noisy reward signal. It can be shown that this correlation in fact approximates this loss gradient. 
-		  
-				  Two problems with a method like this is that it requires each neuron measures and IID noise source xi. And again, it's not clear how a neuron can know that it output compared to some hyperthetical quantity, what is was expected to output. And second, that the variances scales with the number of neurons. So it is challenging to get to work on large networks. 
-
-				  We will tackle these two problems in this talk. 
-				  • <span style="color: green"></span>
-				</aside>
-			  </section>
+				<h2>The neuronal credit assignment problem</h2>
+				<p>To learn, a neuron must know its effect on the loss function</p>
+				<p><br>In spiking neural networks, this means something like:</p>
+				<ul>
+					<li> If, for a given input, a spike increases the loss, the weights leading to that spike should decrease
+					<li> If, for a given input, a spike decreases the loss, the weights leading to that spike should increase
+				</ul>
+				</aside></section>
 		  
 		  <!-- ---------------------------------------------------------------------- -->
 		  <!-- ---------------------------------------------------------------------- -->
@@ -418,7 +253,7 @@
 		  
 			  <section data-background-color="#ffffff">
 				<h2>Causality</h2>
-				<img src="assets/intervention.png" width="80%">
+				<img src="assets/intervention.svg" width="80%">
 				<ul>
 				  <li> Defined in terms of counterfactuals or interventions
 				  <li> The causal effect: $\beta = \mathbb{E}(P|A\leftarrow 1) - \mathbb{E}(P|A\leftarrow 0)$
@@ -431,16 +266,13 @@
 			</section>
 		  
 			  <section data-background-color="#ffffff">
-				  <h2>Learning &ndash; which actions <em>cause</em> reward?</h2>
-				  <p>Credit assignment (Definition 3):</p>
-				  <ul>
-					  <li> What is a neuron's causal effect on reward, and so how should it change to improve performance?
+				  <h2>Credit assignment as causal inference</h2>
+				  <p>What is a neuron's causal effect on reward, and so how should it change to improve performance?
 						  $$
-						  \frac{\partial R}{\partial h} \approx \mathbb{E}(R|  H_i \leftarrow 0) - \mathbb{E}(R| H_i \leftarrow 0)
+						  \beta_i = \mathbb{E}(R|  H_i \leftarrow 1) - \mathbb{E}(R| H_i \leftarrow 0)
 						  $$
-						<li>REINFORCE-based methods rely on a neuron's activity being randomized (like an RCT)</li> 
-				  </ul>
-				  <p class="fragment">$\Rightarrow$ Can a neuron solve this causal inference problem without randomizing?</p>
+						</p>
+				  <p class="fragment">$\Rightarrow$ How can a neuron perform causal inference?</p>
 				  <aside class="notes">
 				  <span style="color: red"></span> •
 				  So, given these ideas we can rephrase our question about credit assignment again. We can rephase our problem into a network wanting to know which actions cause reward. And, what is a neuron's causal effect on reward, and so how should it change to improve? 
@@ -453,14 +285,31 @@
 			  </section>
 		  
 			  <section data-background-color="#ffffff">
+				<h2>Credit assignment as causal inference</h2>
+				<p>One solution: Randomization</p>
+
+				If independent (unconfounded) noise is added to the system, this can be correlated with reward for an estimate of loss gradients
+
+				<p class="fragment">$\Rightarrow$ How can a neuron perform causal inference?</p>
+				<aside class="notes">
+				<span style="color: red"></span> •
+				So, given these ideas we can rephrase our question about credit assignment again. We can rephase our problem into a network wanting to know which actions cause reward. And, what is a neuron's causal effect on reward, and so how should it change to improve? 
+
+				Given this interpretation, we can see that methods like those based on REINFORCE address this problem by adding randomization to a neuron's output. That is, you can think of this as a type of RCT approach to doing this causal inference. 
+
+				The question is, can a neuron solve this causal inference problem without randomizing? 
+				• <span style="color: green"></span>
+			  </aside>
+			</section>
+
+
+			  <section data-background-color="#ffffff">
 				  <h2>An observation</h2>
 				  Decisions made with arbitary thresholds let us observe counterfactuals
 				  <br>
 				  <img src="assets/rdd.svg" width="50%">
 				  <p class="rcred">Adapted from Moscoe et al, J Clin Epid 2015</p>
-				  <ul>
-					  <li> Known as regression discontinuity design (RDD) in economics
-				  </ul>
+					Known as regression discontinuity design (RDD) in economics
 				<aside class="notes">
 				  <span style="color: red"></span> •
 				  We make use of the following observation. Decisions made with arbitary thresholds let us estiamte causal effects. The marginal populations only differ by the fact that one groups recieves the treatment, and the other does not. Thus this removes confounds and lets us measure beta. 
@@ -469,7 +318,7 @@
 			  </section>
 		  
 			  <section data-background-color="#ffffff">
-				<h2>Two further observations:</h2>
+				<h2>Two more observations:</h2>
 					<ol>
 						<li> A neuron <em>only</em> spikes if its input is above a threshold
 						<li> A spike can have a measurable effect on outcome and reward
@@ -565,8 +414,7 @@
 					<p>Then:
 				  $$
 				  \frac{\partial R}{\partial w^i_j} \approx \frac{\partial H^i}{\partial w^i_j} \beta^i
-				  $$
-					Operates over timescales where a spike matters and feedback can be provided (< ~10Hz)</p> 
+				  $$</p> 
 		  
 				<aside class="notes">
 				  <span style="color: red"></span> •
@@ -651,7 +499,7 @@
 					  <li> RDD can be used to estimate causal effects, and can provide a solution to the credit assignment problem in spiking neural networks
 					  <li> Relies on the fact that neurons spike when input exceeds a threshold &ndash; spiking is a feature not a bug
 					  <li> Shows a neuron can do causal inference without needing to randomize
-					  <li> Largely proof of principle, but consistent with subthreshold-dependent plasticity
+					  <li> Largely conceptual, but consistent with subthreshold-dependent plasticity
 				  </ul>
 		  
 				<aside class="notes">
